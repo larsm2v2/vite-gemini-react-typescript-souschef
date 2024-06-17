@@ -1,0 +1,43 @@
+secrets:
+    api_key:
+        file: ./server/api_key.txt
+services:
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        ports:
+            - "5173:5173"
+        environment:
+            - VITE_API_URL=/api # Point to server container
+            - NODE_ENV=development
+        volumes:
+            - ./client:/app
+            - node_modules:/app/node_modules
+        command: npm run start -- --force
+        networks:
+            - myAppNetwork
+        depends_on:
+            - server
+    server:
+        secrets:
+            - api_key
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        ports:
+            - "5000:5000"
+        environment:
+            - API_KEY_FILE=/run/secrets/api_key
+            - CORS_ORIGIN=http://localhost:5173
+        volumes:
+            - ./server:/app
+        networks:
+            - myAppNetwork
+
+volumes:
+    node_modules:
+
+networks:
+    myAppNetwork:
+        driver: bridge

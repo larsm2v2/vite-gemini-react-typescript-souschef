@@ -1,0 +1,75 @@
+services:
+    backend:
+        build:
+            context: server
+            dockerfile: Dockerfile
+            args:
+                - NODE_ENV=development # Pass build-time arguments
+        image: sample-backend # Name your image for easier reference
+        command: npm run start-watch
+        environment:
+            - DATABASE_DB=example
+            - DATABASE_USER=root
+            - DATABASE_PASSWORD_FILE=/run/secrets/db-password
+            - DATABASE_HOST=db
+            - NODE_ENV=development
+        ports:
+            - 5000:5000
+            - 9229:9229 # Node.js debugging ports
+            - 9230:9230
+        secrets:
+            - db-password
+        volumes:
+            - ./backend/src:/code/src:ro # Use named volumes for clarity
+            - backend-deps:/opt/app/node_modules
+        networks:
+            - backend
+        depends_on:
+            - db
+        healthcheck: # Add a healthcheck to ensure the service is running
+            test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+            interval: 10s
+            timeout: 5s
+            retries: 3
+
+    db:
+        image: mariadb:11.5.1-ubi9-rcs # Use an official image with a specific tag
+        command: "--default-authentication-plugin=mysql_native_password"
+        restart: always
+        secrets:
+            - db-password
+        volumes:
+            - db-data:/var/lib/mysql
+        networks:
+            - backend
+        environment:
+            - MYSQL_DATABASE=example
+            - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+
+    frontend:
+        build:
+            context: client
+            dockerfile: Dockerfile
+        image: sample-frontend
+        ports:
+            - 3001:3001
+        volumes:
+            - ./client:/code
+            - frontend-deps:/code/node_modules # Named volume for frontend deps
+        networks:
+            - frontend
+        depends_on:
+            - backend
+
+networks:
+    frontend:
+    backend:
+
+volumes:
+    db-data: # Named volume for database data persistence
+    backend-deps:
+    frontend-deps:
+
+secrets:
+    db-password:
+        file: db/password.txt

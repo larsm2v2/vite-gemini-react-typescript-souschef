@@ -1,0 +1,39 @@
+# Use Node.js Alpine LTS as the base image
+FROM node:18.20.2-alpine AS development
+
+# Set the NODE_ENV (defaults to production if not overridden)
+ARG NODE_ENV=production
+ENV NODE_ENV $NODE_ENV
+
+# Set working directory
+WORKDIR /code
+
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm ci --only=production  # Only install production dependencies
+
+# Copy application source code
+COPY . .
+
+# Set port and expose it
+ARG PORT=5000
+ENV PORT $PORT
+EXPOSE $PORT
+
+# Healthcheck (if you have a healthcheck.js script)
+#HEALTHCHECK --interval=30s \
+# CMD node healthcheck.js
+
+# Development Stage (optional)
+FROM development AS dev-envs
+RUN apk add --no-cache git  # Install additional tools if needed
+
+# Create a non-root user (optional)
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Expose additional ports for debugging (optional)
+EXPOSE 9229 9230
+
+# Start the application (use npm run dev for development, or your specific command)
+CMD ["npm", "run", "dev"] 

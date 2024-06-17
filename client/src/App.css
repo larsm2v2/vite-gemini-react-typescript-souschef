@@ -1,0 +1,109 @@
+.Fragment {
+  flex-direction: column;
+  display: flex;
+}
+
+.App {
+  width: 100%;
+  padding: 0 0rem 0 0rem;
+  text-align: center;
+  background-color: var(--tertiary-background-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+  color: var(--primary-text-color);
+  text-decoration: none;
+}
+
+.App_with_sidebar {
+  display: flex;
+flex-direction: row;
+
+}
+
+/* .AppNavBar {
+  background-color: var(--secondary-text-color);
+} */
+.nav-items{
+  left: 0;
+  right:0;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--secondary-text-color);
+  color: var(--tertiary-background-color);
+}
+.nav-items.sticky {
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 110;
+}
+
+.sidebar-items{
+  position: absolute;
+  top: calc(var(--navbar-height));
+  right:0;
+  width: 40%;
+  height: 100vh;
+  z-index: 105;
+  transition: transform 0.3s ease-in-out/* , width 0.3s ease-in-out */;
+  display: none;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  align-items: start;
+  background-color: var(--secondary-text-color); 
+  overflow: hidden;
+
+}
+
+.sidebar-items.open {
+  width: 40%;
+  display: flex;
+}
+
+
+.App-souschef{
+  justify-content: center;
+  display: flex;
+  flex-direction:column;
+}
+.App-shoppinglist {
+  justify-content: center;
+  display: flex;
+  flex-direction:column;
+}
+.App-recipes{
+  justify-content: center;
+  display: flex;
+  flex-direction:column;
+}
+.App-ocr{
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .App {
+  padding-top: 60px;
+}
+
+@media (max-width: 768px) {
+  .sidebar-items {
+    top: calc(var(--navbar-height));
+  }
+  .App_with_sidebar {
+    flex-direction: column;
+  }
+}
