@@ -218,7 +218,7 @@ const RecipesIndex: React.FC<RecipesIndexProps> = ({
 
 	/* 	useEffect(() => {
 		const eventSource = new EventSource(
-			"/api/recipes-stream"
+			"/recipes-stream"
 		)
 
 		eventSource.onmessage = (event) => {

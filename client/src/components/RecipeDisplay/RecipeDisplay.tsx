@@ -18,7 +18,6 @@ interface RecipeDisplayProps {
 	setSelectedRecipeIds: React.Dispatch<React.SetStateAction<string[]>>
 	generatedRecipe?: RecipeModel | null
 	setGeneratedRecipe: (recipe: RecipeModel | null) => void
-	selectedRecipe: RecipeModel | null
 	setSelectedRecipe: (recipe: RecipeModel | null) => void
 	recipeToDisplay: RecipeModel | null
 	setRecipeToDisplay: (recipe: RecipeModel | null) => void
@@ -39,7 +38,6 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({
 	setSelectedRecipeIds,
 	generatedRecipe,
 	setGeneratedRecipe,
-	selectedRecipe,
 	setSelectedRecipe,
 	recipeToDisplay,
 	setRecipeToDisplay,
@@ -174,7 +172,7 @@ const RecipeDisplay: React.FC<RecipeDisplayProps> = ({
 
 	return (
 		<div className="recipes-container">
-			{selectedRecipe ? (
+			{recipeToDisplay && !isLoading ? (
 				<div className="recipes-container">
 					<RecipeDetails
 						showRecipe={recipeToDisplay}

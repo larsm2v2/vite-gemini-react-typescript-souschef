@@ -17,8 +17,9 @@ const PORT = process.env.PORT || 5000
 const app = express()
 app.use(
 	cors({
-		origin: "http://localhost:5173",
-		methods: ["GET", "POST"],
+		origin: "http://localhost:5173", // Allow requests from this origin
+		methods: ["GET", "POST", "PUT", "DELETE"],
+		allowedHeaders: ["Content-Type", "Authorization"],
 	})
 )
 app.use(express.json())
@@ -100,8 +101,8 @@ app.post(
 			history: req.body.history,
 			generationConfig: {
 				/* maxOutputTokens: 100, */
-				temperature: 0.7,
-				topP: 0.4,
+				temperature: 0.3,
+				topP: 0.2,
 			},
 		})
 		const msg = req.body.message

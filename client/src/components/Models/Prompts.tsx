@@ -59,15 +59,16 @@ export function preprompt(
                 **Phrases like "For the sauce", "For the marinade", "For the dough" should signify that the subsequent ingredients be separated into their respective ingredient subcategories.**
 `
 			: `  
-                1.  **Cuisine:** Use the following cuisine: \`${cuisine}\`. If not specified, infer the cuisine based on the ingredients or recipe name.
-                2.  **Dietary Restrictions:** Adhere to the following restrictions: \`${dietaryRestrictions}\`. If not specified, list any that apply based on the ingredients.
-                3.  **Known Ingredients:** Include the following ingredients: \`${knownIngredients}\` plus any other suitable ingredients. If none are specified, use any ingredients suitable for the recipe.
-                4.  **Avoid Ingredients:** Ensure the recipe does not contain any of these ingredients: \`${avoidIngredients}\` as they are harmful or inappropriate.
-                5.  **Other Info** Ensure that the recipe considers the following: \`${otherInfo}\`.
-                5.  **No False Statements:** Ensure all information is accurate and verifiable.
-                6.  **Format:**  Ensure the JSON output is well-formatted and easy to read.
-                7.  **Instructions:** Provide clear, concise instructions for each step of the recipe.
-                8.  **DO NOT TRUNCATE THE RECIPE:** ENSURE THAT THE RECIPE IS COMPLETE AND NOT CUT OFF. 
+                1.  **Cuisine:** Use the following cuisine: \`${cuisine}\`. If not specified, infer the cuisine based on the ingredients, recipe name, or the adjective describing the recipe like Show me a Welsh recipe means the cuisine is Welsh.
+                2.  **Meal Type:** Infer from adjectives describing the recipe.
+                3.  **Dietary Restrictions:** Adhere to the following restrictions: \`${dietaryRestrictions}\`. If not specified, list any that apply based on the ingredients.
+                4.  **Known Ingredients:** Include the following ingredients: \`${knownIngredients}\` plus any other suitable ingredients. If none are specified, use any ingredients suitable for the recipe.
+                5.  **Avoid Ingredients:** Ensure the recipe does not contain any of these ingredients: \`${avoidIngredients}\` as they are harmful or inappropriate.
+                6.  **Other Info** Ensure that the recipe considers the following: \`${otherInfo}\`.
+                7.  **No False Statements:** Ensure all information is accurate and verifiable.
+                8.  **Format:**  Ensure the JSON output is well-formatted and easy to read.
+                9.  **Instructions:** Provide clear, concise instructions for each step of the recipe.
+                10.  **DO NOT TRUNCATE THE RECIPE:** ENSURE THAT THE RECIPE IS COMPLETE AND NOT CUT OFF. 
                 No ellipses should be present in the recipe.`
 	}
 	return `
@@ -81,8 +82,8 @@ export function preprompt(
   *   **name:** string (The name of the recipe)
   *   **unique id:** number (Use \`Date.now()\` to generate)
   *   **id:** string (The recipe name with hyphens replacing spaces)
-  *   **cuisine:** string (Use the specified cuisine or infer it if not provided)
-  *   **meal type:** string ("breakfast", "lunch", "brunch", "dinner", or "dessert")
+  *   **cuisine:** string (Use the specified cuisine or **Infer from adjectives describing the recipe** like Show me a Welsh recipe means the cuisine is Welsh.
+  *   **meal type:** string ("breakfast", "lunch", "brunch", "dinner", or "dessert". **Infer from adjectives describing the recipe**)
   *   **dietary restrictions and designations:** string[] (Use the specified restrictions or infer them if not provided)
   *   **serving info:**
       *   **prep time:** string (Estimated preparation time)

@@ -1,21 +1,23 @@
 import React, { useEffect, useCallback } from "react"
-import { assets } from "../../assets/assets"
+import { RecipeModel } from "../Models/Models"
 import "./Navbar.css"
 import "../Sidebar/Sidebar.css"
 
-interface Props {
+interface NavbarProps {
 	sidebarToggled: boolean
 	setSidebarToggled: React.Dispatch<React.SetStateAction<boolean>>
 	setActiveContent: React.Dispatch<
 		React.SetStateAction<"recipes" | "sousChef">
 	>
+	setRecipeToDisplay: React.Dispatch<React.SetStateAction<RecipeModel | null>>
 }
 
-const Navbar: React.FC<Props> = ({
+const Navbar: React.FC<NavbarProps> = ({
 	sidebarToggled,
 	setSidebarToggled,
 	setActiveContent,
-}: Props) => {
+	setRecipeToDisplay,
+}: NavbarProps) => {
 	const togglesidebar = () => {
 		setSidebarToggled((prevState) => !prevState)
 	}
@@ -69,14 +71,10 @@ const Navbar: React.FC<Props> = ({
 	return (
 		<nav className={"nav"}>
 			<ul>
-				<img
-					className="sidebar-toggle"
-					src={assets.menu_icon}
-					alt="Menu"
-				/>
 				<li
 					onClick={() => {
 						setActiveContent("recipes")
+						setRecipeToDisplay(null)
 					}}
 				>
 					myRecipes
@@ -84,6 +82,7 @@ const Navbar: React.FC<Props> = ({
 				<li
 					onClick={() => {
 						setActiveContent("sousChef")
+						setRecipeToDisplay(null)
 					}}
 				>
 					mySousChef

@@ -36,7 +36,6 @@ const SousChef: React.FC<SousChefProps> = ({
 	setIsLoading,
 }) => {
 	const [value, setValue] = useState("")
-	const [passedValue, setPassedValue] = useState("")
 	const [error, setError] = useState("")
 	const [chatHistory] = useState<Array<{ role: string; parts: string[] }>>([])
 	const [cuisine, setCuisine] = useState("")
@@ -60,23 +59,15 @@ const SousChef: React.FC<SousChefProps> = ({
 
 	const getResponse = async () => {
 		setIsLoading(true) // Set loading state to true
-		const specificExpanded = [
-			cuisine,
-			ocrAddon,
-			knownIngredients,
-			avoidIngredients,
-			dietaryRestrictions,
-			otherInfo,
-		]
-			.filter(Boolean)
-			.join(", ")
-		if (!value && !specificExpanded) {
-			setError("Let's try that again. Please ask a question.")
-			return
-		}
-		if (value) {
-			setPassedValue(value)
-		}
+
+		// Get the current values of all state variables
+		const currentCuisine = cuisine
+		const currentOcrAddon = ocrAddon
+		const currentKnownIngredients = knownIngredients
+		const currentAvoidIngredients = avoidIngredients
+		const currentDietaryRestrictions = dietaryRestrictions
+		const currentOtherInfo = otherInfo
+		const currentPassedValue = value
 		try {
 			const options = {
 				method: "POST",
@@ -84,20 +75,20 @@ const SousChef: React.FC<SousChefProps> = ({
 					history: chatHistory,
 					message:
 						preprompt(
-							cuisine,
-							dietaryRestrictions,
-							knownIngredients,
-							avoidIngredients,
-							otherInfo,
-							ocrAddon || ""
-						) + passedValue,
+							currentCuisine,
+							currentDietaryRestrictions,
+							currentKnownIngredients,
+							currentAvoidIngredients,
+							currentOtherInfo,
+							currentOcrAddon || ""
+						) + currentPassedValue,
 				}),
 				headers: {
 					"Content-Type": "application/json",
 				},
 			}
 			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/gemini`,
+				`${import.meta.env.VITE_API_URL}/api/gemini`,
 				options
 			)
 			const data = await response.text()

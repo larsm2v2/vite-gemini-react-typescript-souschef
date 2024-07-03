@@ -19,6 +19,7 @@ function parseQuantity(quantityStr: string | number): number {
 export function cleanRecipe(recipe: any): RecipeModel {
 	const cleanedRecipe = {
 		...recipe,
+		name: recipe.name || "", // Set to empty string if not present
 		"unique id": parseInt(recipe["unique id"], 10) || 0,
 		"serving info": {
 			...recipe["serving info"],
@@ -56,18 +57,22 @@ export function cleanRecipe(recipe: any): RecipeModel {
 
 // Fix all recipes in the data
 export function cleanedRecipeData(recipeData: any[]): RecipeModel[] {
-	const seenRecipes = new Set<string>() // Keep track of seen recipe combinations
-	const cleanedRecipes = (recipeData as any[]).map(cleanRecipe) // Clean the recipes first
+	try {
+		const seenRecipes = new Set<string>() // Keep track of seen recipe combinations
+		const cleanedRecipes = (recipeData as any[]).map(cleanRecipe) // Clean the recipes first
+		const uniqueRecipes: RecipeModel[] = []
 
-	const uniqueRecipes: RecipeModel[] = []
-
-	for (const recipe of cleanedRecipes) {
-		const recipeKey = `${recipe.name}-${recipe.cuisine}` // Create a unique key
-		if (!seenRecipes.has(recipeKey)) {
-			uniqueRecipes.push(recipe)
-			seenRecipes.add(recipeKey)
+		for (const recipe of cleanedRecipes) {
+			const recipeKey = `${recipe.name}-${recipe.cuisine}` // Create a unique key
+			if (!seenRecipes.has(recipeKey)) {
+				uniqueRecipes.push(recipe)
+				seenRecipes.add(recipeKey)
+			}
 		}
-	}
 
-	return uniqueRecipes
+		return uniqueRecipes
+	} catch (error) {
+		console.error("Error in cleanedRecipeData:", error)
+		throw error
+	}
 }

@@ -16,7 +16,7 @@ client/.env
 server/node_modules
 server/.env
 server/api_key.txt
-
+*.txt
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

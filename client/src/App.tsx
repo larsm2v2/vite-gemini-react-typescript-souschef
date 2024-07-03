@@ -24,9 +24,7 @@ function App() {
 	const [generatedRecipe, setGeneratedRecipe] = useState<RecipeModel | null>(
 		null
 	)
-	const [selectedRecipe, setSelectedRecipe] = useState<RecipeModel | null>(
-		null
-	)
+	const [, setSelectedRecipe] = useState<RecipeModel | null>(null)
 	const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(
 		null
 	)
@@ -87,6 +85,11 @@ function App() {
 		return () => window.removeEventListener("scroll", navbarFixedTop)
 	}, []) // Empty dependency array ensures this runs only once on mount
 
+	useEffect(() => {
+		if (activeContent === "sousChef") {
+			setRecipeToDisplay(null) // Reset when switching to sousChef
+		}
+	}, [activeContent])
 	return (
 		<Fragment>
 			<nav className="nav-items" id="App-navbar">
@@ -94,6 +97,7 @@ function App() {
 					sidebarToggled={sidebarToggled}
 					setSidebarToggled={setSidebarToggled}
 					setActiveContent={setActiveContent}
+					setRecipeToDisplay={setRecipeToDisplay}
 				/>
 			</nav>
 			<div className="App_with_sidebar">
@@ -115,7 +119,6 @@ function App() {
 						setSelectedRecipeIds={setSelectedRecipeIds}
 						generatedRecipe={generatedRecipe}
 						setGeneratedRecipe={setGeneratedRecipe}
-						selectedRecipe={selectedRecipe}
 						setSelectedRecipe={setSelectedRecipe}
 						recipeToDisplay={recipeToDisplay}
 						setRecipeToDisplay={setRecipeToDisplay}

@@ -180,10 +180,16 @@ const ShoppingList: React.FC<ShoppingListProps> = ({
 								).find((key) => {
 									const normalizedIngredientName =
 										ingredient.name.toLowerCase().trim() // Normalize for better matching
-									return ingredientSynonyms[key].some(
-										(synonym) =>
-											synonym.toLowerCase().trim() ===
-											normalizedIngredientName
+									// Get the array of synonyms for the current key
+									const synonymsForIngredient =
+										ingredientSynonyms[key]
+									return (
+										Array.isArray(synonymsForIngredient) && // Ensure it's an array
+										synonymsForIngredient.some(
+											(synonym) =>
+												synonym.toLowerCase().trim() ===
+												normalizedIngredientName
+										)
 									)
 								})
 								return {
