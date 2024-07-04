@@ -68,20 +68,27 @@ const SousChef: React.FC<SousChefProps> = ({
 		const currentDietaryRestrictions = dietaryRestrictions
 		const currentOtherInfo = otherInfo
 		const currentPassedValue = value
+		const currentInputMode = inputMode
 		try {
+			// Create message based on inputMode
+			let message = ""
+			if (currentInputMode === "specific") {
+				message = preprompt(
+					currentCuisine,
+					currentDietaryRestrictions,
+					currentKnownIngredients,
+					currentAvoidIngredients,
+					currentOtherInfo,
+					currentOcrAddon || ""
+				)
+			} else {
+				message = currentPassedValue // For "askAway" mode
+			}
 			const options = {
 				method: "POST",
 				body: JSON.stringify({
 					history: chatHistory,
-					message:
-						preprompt(
-							currentCuisine,
-							currentDietaryRestrictions,
-							currentKnownIngredients,
-							currentAvoidIngredients,
-							currentOtherInfo,
-							currentOcrAddon || ""
-						) + currentPassedValue,
+					message: message,
 				}),
 				headers: {
 					"Content-Type": "application/json",
